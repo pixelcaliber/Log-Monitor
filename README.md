@@ -1,5 +1,61 @@
-# Log-Monitor
+# Real-Time Log Monitoring and Broadcasting System
+## Project Overview
 
+This application is a robust, real-time log monitoring and broadcasting system. It leverages the power of asyncio, WebSockets, docker and load balancing through NGINX to create a scalable solution for monitoring vast size log files and broadcasting updates to multiple clients in real-time.
+
+
+## Key Features
+
+1. Real-time log file monitoring
+2. WebSocket-based live updates to connected clients without them to refresh the page
+3. Multithreaded architecture for improved performance and handling multiple clients
+4. Load balancing to handle to distribute the load among the servers achieving scalability
+5. System leverages containerization and load balancing to ensure high availability and scalability
+
+## System Architecture
+
+#### LogMonitor
+
+The `LogMonitor` class is designed to continuously read from a specified log file present in remote server through docker bind mount, detecting new entries as they are appended. It implements the Observer pattern, allowing multiple listeners (such as the WebSocket server) to be notified of new log entries in real-time.
+
+Key features:
+- Efficient file reading using binary mode and seek operations
+- Support for retrieving the last N lines of the log file
+- Thread-safe observer registration and notification
+
+#### Socket (WebSocket Server)
+
+The `Socket` class manages WebSocket connections with clients, providing real-time updates of log changes. It's built on top of the `websockets` library, leveraging Python's asynchronous capabilities for high-performance communication through asyncio.
+
+Key features:
+- Asynchronous client handling for improved scalability
+- Periodic client pinging to maintain connection integrity and freeing up space 
+
+#### Flask Application
+
+The Flask application serves as the main entry point and provides a RESTful API for interacting with the system. It's designed using the application factory pattern, allowing for easy configuration and extension.
+
+## Performance and Scalability
+The system has been designed and tested for high performance and scalability, check `load_test.py`:
+### Load Testing Results
+Load testing has been performed to ensure the system can handle a large number of concurrent connections:
+
+- Concurrent Clients: Successfully tested with 1000 simultaneous client connections.
+- Server Instances: The test was conducted with 30 application instances.
+- Performance: The system maintained responsiveness and data integrity under this high load.
+
+#### These results demonstrate the system's capability to handle a significant number of concurrent users, making it suitable for large-scale deployments.
+
+## Approach and Design Principles
+
+1. **Asynchronous Programming**: Leveraging async/await syntax for efficient I/O operations and client handling.
+
+2. **Observer Pattern**: Implemented in the LogMonitor to allow flexible and decoupled event notification.
+
+3. **Factory Pattern**: Used in the Flask application setup for improved configurability and testing.
+
+
+### Commands
 ```
 cd app
     python -m venv venv

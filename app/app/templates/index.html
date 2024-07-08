@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Viewer</title>
+</head>
+<body>
+    <h1>Log Viewer</h1>
+    <pre id="log"></pre>
+
+    <script>
+        const logElement = document.getElementById('log');
+        const socket = new WebSocket('ws://192.168.105.2/ws'); // minikube IP
+
+        socket.onopen = function () {
+            console.log('Connected to the server');
+        };
+
+        socket.onmessage = function (event) {
+            logElement.textContent += event.data;
+            logElement.scrollTop = logElement.scrollHeight;
+        };
+
+        socket.onclose = function () {
+            console.log('Disconnected from the server');
+        };
+    </script>
+</body>
+</html>

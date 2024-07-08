@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  app:
+    build: app
+    expose:
+      - 5000
+    volumes:
+      - /minikube-host/logs:/shared/logs:rw
+  nginx:
+    container_name: nginx
+    build: nginx
+    ports:
+      - 80:80
+    depends_on:
+      - app
+
+networks:
+  default:
+    name: my_network
